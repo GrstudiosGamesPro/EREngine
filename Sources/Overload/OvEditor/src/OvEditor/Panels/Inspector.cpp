@@ -41,6 +41,7 @@
 #include <OvWindowing/Dialogs/MessageBox.h>
 
 #include "OvEditor/Core/EditorActions.h"
+#include "../Components/CParticles.h"
 
 using namespace OvCore::ECS::Components;
 using namespace OvUI::Widgets;
@@ -90,6 +91,7 @@ OvEditor::Panels::Inspector::Inspector
 		componentSelectorWidget.choices.emplace(10, "Material Renderer");
 		componentSelectorWidget.choices.emplace(11, "Audio Source");
 		componentSelectorWidget.choices.emplace(12, "Audio Listener");
+		componentSelectorWidget.choices.emplace(13, "Particles System");
 
 		auto& addComponentButton = m_inspectorHeader->CreateWidget<OvUI::Widgets::Buttons::Button>("Add Component", OvMaths::FVector2{ 100.f, 0 });
 		addComponentButton.idleBackgroundColor = OvUI::Types::Color{ 0.7f, 0.5f, 0.f };
@@ -111,6 +113,7 @@ OvEditor::Panels::Inspector::Inspector
 			case 10: GetTargetActor()->AddComponent<CMaterialRenderer>();	break;
 			case 11: GetTargetActor()->AddComponent<CAudioSource>();		break;
 			case 12: GetTargetActor()->AddComponent<CAudioListener>();		break;
+			case 13: GetTargetActor()->AddComponent<CParticles>();   		break;
 			}
 
 			componentSelectorWidget.ValueChangedEvent.Invoke(componentSelectorWidget.currentChoice);
@@ -139,6 +142,7 @@ OvEditor::Panels::Inspector::Inspector
 			case 10: defineButtonsStates(GetTargetActor()->GetComponent<CMaterialRenderer>());	return;
 			case 11: defineButtonsStates(GetTargetActor()->GetComponent<CAudioSource>());		return;
 			case 12: defineButtonsStates(GetTargetActor()->GetComponent<CAudioListener>());		return;
+			case 13: defineButtonsStates(GetTargetActor()->GetComponent<CParticles>());		    return;
 			}
 		};
 

@@ -21,6 +21,7 @@
 #include "OvCore/ECS/Components/CSpotLight.h"
 #include "OvCore/ECS/Components/CAmbientBoxLight.h"
 #include "OvCore/ECS/Components/CAmbientSphereLight.h"
+#include "../Components/CParticles.h"
 
 OvTools::Eventing::Event<OvCore::ECS::Actor&> OvCore::ECS::Actor::DestroyedEvent;
 OvTools::Eventing::Event<OvCore::ECS::Actor&> OvCore::ECS::Actor::CreatedEvent;
@@ -447,6 +448,7 @@ void OvCore::ECS::Actor::OnDeserialize(tinyxml2::XMLDocument & p_doc, tinyxml2::
 				else if (componentType == typeid(Components::CSpotLight).name())			component = &AddComponent<OvCore::ECS::Components::CSpotLight>();
 				else if (componentType == typeid(Components::CAmbientBoxLight).name())		component = &AddComponent<OvCore::ECS::Components::CAmbientBoxLight>();
 				else if (componentType == typeid(Components::CAmbientSphereLight).name())	component = &AddComponent<OvCore::ECS::Components::CAmbientSphereLight>();
+				else if (componentType == typeid(Components::CParticles).name())	component = &AddComponent<OvCore::ECS::Components::CParticles>();
 
 				if (component)
 					component->OnDeserialize(p_doc, currentComponent->FirstChildElement("data"));

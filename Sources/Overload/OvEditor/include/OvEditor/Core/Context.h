@@ -34,6 +34,7 @@
 #include <OvAudio/Core/AudioPlayer.h>
 
 #include "OvEditor/Core/EditorResources.h"
+#include "../Components/CParticles.h"
 
 namespace OvEditor::Core
 {
@@ -80,6 +81,7 @@ namespace OvEditor::Core
 		const std::string projectScriptsPath;
 		const std::string editorAssetsPath;
 
+		std::unique_ptr<OvCore::ECS::Components::CParticles>		particles;
 		std::unique_ptr<OvWindowing::Context::Device>			device;
 		std::unique_ptr<OvWindowing::Window>					window;
 		std::unique_ptr<OvWindowing::Inputs::InputManager>		inputManager;
@@ -91,6 +93,7 @@ namespace OvEditor::Core
 		std::unique_ptr<OvAudio::Core::AudioEngine>				audioEngine;
 		std::unique_ptr<OvAudio::Core::AudioPlayer>				audioPlayer;
 		std::unique_ptr<OvEditor::Core::EditorResources>		editorResources;
+
 
 		std::unique_ptr<OvCore::Scripting::ScriptInterpreter>	scriptInterpreter;
 		std::unique_ptr<OvRendering::Buffers::UniformBuffer>	engineUBO;

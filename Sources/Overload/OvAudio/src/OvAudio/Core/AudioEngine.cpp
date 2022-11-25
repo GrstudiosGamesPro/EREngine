@@ -1,9 +1,3 @@
-/**
-* @project: Overload
-* @author: Overload Tech.
-* @licence: MIT
-*/
-
 #include "OvAudio/Core/AudioEngine.h"
 
 #include <algorithm>

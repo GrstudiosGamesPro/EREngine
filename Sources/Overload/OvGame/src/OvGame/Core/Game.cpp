@@ -82,6 +82,13 @@ void OvGame::Core::Game::Update(float p_deltaTime)
 		}
 
 		{
+#ifdef _DEBUG
+			PROFILER_SPY("Particles Update");
+#endif
+			m_context.particles->Update();
+		}
+
+		{
 			#ifdef _DEBUG
 			PROFILER_SPY("Render Scene");
 			#endif

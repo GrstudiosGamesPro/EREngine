@@ -144,6 +144,11 @@ void OvEditor::Core::Editor::UpdatePlayMode(float p_deltaTime)
 		m_context.audioEngine->Update();
 	}
 
+	{
+		PROFILER_SPY("Particles Update");
+		m_context.particles->Update();
+	}
+
 	ImGui::GetIO().DisableMouseUpdate = m_context.window->GetCursorMode() == OvWindowing::Cursor::ECursorMode::DISABLED;
 
 	if (m_editorActions.GetCurrentEditorMode() == EditorActions::EEditorMode::FRAME_BY_FRAME)

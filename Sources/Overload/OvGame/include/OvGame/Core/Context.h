@@ -30,6 +30,7 @@
 #include <OvAudio/Core/AudioPlayer.h>
 
 #include <OvTools/Filesystem/IniFile.h>
+#include "../Components/CParticles.h"
 
 namespace OvGame::Core
 {
@@ -66,6 +67,7 @@ namespace OvGame::Core
 		std::unique_ptr<OvCore::Scripting::ScriptInterpreter>		scriptInterpreter;
 		std::unique_ptr<OvRendering::Buffers::UniformBuffer>		engineUBO;
 		std::unique_ptr<OvRendering::Buffers::ShaderStorageBuffer>	lightSSBO;
+		std::unique_ptr<OvCore::ECS::Components::CParticles>		particles;
 
 		OvCore::SceneSystem::SceneManager sceneManager;
 

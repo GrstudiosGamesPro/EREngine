@@ -20,6 +20,7 @@
 
 #include "OvEditor/Core/EditorActions.h"
 #include "OvEditor/Utils/ActorCreationMenu.h"
+#include "../Components/CParticles.h"
 
 std::function<void()> Combine(std::function<void()> p_a, std::optional<std::function<void()>> p_b)
 {
@@ -58,6 +59,7 @@ void OvEditor::Utils::ActorCreationMenu::GenerateActorCreationMenu(OvUI::Widgets
     auto& lights = p_menuList.CreateWidget<MenuList>("Lights");
     auto& audio = p_menuList.CreateWidget<MenuList>("Audio");
     auto& others = p_menuList.CreateWidget<MenuList>("Others");
+    auto& particles = p_menuList.CreateWidget<MenuList>("Particles System");
 
     primitives.CreateWidget<MenuItem>("Cube").ClickedEvent              += ActorWithModelComponentCreationHandler(p_parent, "Cube", p_onItemClicked);
     primitives.CreateWidget<MenuItem>("Sphere").ClickedEvent            += ActorWithModelComponentCreationHandler(p_parent, "Sphere", p_onItemClicked);
@@ -80,4 +82,5 @@ void OvEditor::Utils::ActorCreationMenu::GenerateActorCreationMenu(OvUI::Widgets
     audio.CreateWidget<MenuItem>("Audio Source").ClickedEvent           += ActorWithComponentCreationHandler<CAudioSource>(p_parent, p_onItemClicked);
     audio.CreateWidget<MenuItem>("Audio Listener").ClickedEvent         += ActorWithComponentCreationHandler<CAudioListener>(p_parent, p_onItemClicked);
     others.CreateWidget<MenuItem>("Camera").ClickedEvent                += ActorWithComponentCreationHandler<CCamera>(p_parent, p_onItemClicked);
+    particles.CreateWidget<MenuItem>("Particles System").ClickedEvent   += ActorWithComponentCreationHandler<CParticles>(p_parent, p_onItemClicked);
 }
