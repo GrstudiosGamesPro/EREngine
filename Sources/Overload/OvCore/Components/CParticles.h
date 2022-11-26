@@ -31,6 +31,7 @@ namespace OvCore::ECS::Components
 		float ParticlesSpeed;
 		float DestroyTime;
 		float InstanceTime;
+		float OpenAngle;
 		OvMaths::FVector3 Direction = OvMaths::FVector3(0, 0, 0);
 
 	private:
@@ -42,6 +43,7 @@ namespace OvCore::ECS::Components
 		virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 		virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 		virtual void OnInspector(OvUI::Internal::WidgetContainer& p_root) override;
+		virtual void OnFixedUpdate(float p_deltaTime) override;
 
 		//FUNCTIONS VOID
 		void Update();
@@ -49,5 +51,6 @@ namespace OvCore::ECS::Components
 		void SetDestroyTime(float DestroyTime);
 		void SetDirection(OvMaths::FVector3 Dir);
 		void SetInstanceTime(float p_Time);
+		void SetOpenAngle(float p_Angle);
 	};
 }

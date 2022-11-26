@@ -106,7 +106,7 @@ namespace OvCore::SceneSystem
 		OvTools::Eventing::Event<> SceneUnloadEvent;
 		OvTools::Eventing::Event<const std::string&> CurrentSceneSourcePathChangedEvent;
 
-	private:
+	public:
 		const std::string m_sceneRootFolder;
 		Scene* m_currentScene = nullptr;
 
