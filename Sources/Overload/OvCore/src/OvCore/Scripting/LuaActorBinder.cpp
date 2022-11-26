@@ -28,40 +28,43 @@ void OvCore::Scripting::LuaActorBinder::BindActor(sol::state & p_luaState)
 	using namespace OvCore::ECS;
 	using namespace OvCore::ECS::Components;
 
+
+	//mira copias ctrl + F y ya con eso dale yo me voy loko cuidate dale bro
+	//que te parecen los nombres vro
 	p_luaState.new_usertype<Actor>("Actor",
 		/* Methods */
-		"GetName", &Actor::GetName,
-		"SetName", &Actor::SetName,
-		"GetTag", &Actor::GetTag,
-		"GetChildren", &Actor::GetChildren,
-		"SetTag", &Actor::SetTag,
-		"GetID", &Actor::GetID,
-		"GetParent", &Actor::GetParent,
-		"SetParent", &Actor::SetParent,
-		"DetachFromParent", &Actor::DetachFromParent,
-		"Destroy", &Actor::MarkAsDestroy,
-		"IsSelfActive", &Actor::IsSelfActive, // TODO: Add to doc
-		"IsActive", &Actor::IsActive,
-		"SetActive", &Actor::SetActive,
+		"ObtenerNombre", &Actor::GetName,
+		"EstablecerNombre", &Actor::SetName,
+		"ObtenerTag", &Actor::GetTag,
+		"ObtenerHijo", &Actor::GetChildren,
+		"EstablecerTag", &Actor::SetTag,
+		"ObtenerID", &Actor::GetID,
+		"ObtenerPadre", &Actor::GetParent,
+		"EstablecerPadre", &Actor::SetParent,
+		"SepararPadre", &Actor::DetachFromParent,
+		"Destruir", &Actor::MarkAsDestroy,
+		"ObjetoActivo", &Actor::IsSelfActive, // TODO: Add to doc
+		"EsActivo", &Actor::IsActive,
+		"EstablecerActivo", &Actor::SetActive,
 
 
 		/* Components Getters */
-		"GetTransform", &Actor::GetComponent<CTransform>,
-		"GetPhysicalObject", &Actor::GetComponent<CPhysicalObject>,
-		"GetPhysicalBox", &Actor::GetComponent<CPhysicalBox>,
-		"GetPhysicalSphere", &Actor::GetComponent<CPhysicalSphere>,
-		"GetPhysicalCapsule", &Actor::GetComponent<CPhysicalCapsule>,
-		"GetCamera", &Actor::GetComponent<CCamera>,
-		"GetLight", &Actor::GetComponent<CLight>,
-		"GetPointLight", &Actor::GetComponent<CPointLight>,
-		"GetSpotLight", &Actor::GetComponent<CSpotLight>,
-		"GetDirectionalLight", &Actor::GetComponent<CDirectionalLight>,
-		"GetAmbientBoxLight", &Actor::GetComponent<CAmbientBoxLight>,
-		"GetAmbientSphereLight", &Actor::GetComponent<CAmbientSphereLight>,
-		"GetModelRenderer", &Actor::GetComponent<CModelRenderer>,
-		"GetMaterialRenderer", &Actor::GetComponent<CMaterialRenderer>,
-		"GetAudioSource", &Actor::GetComponent<CAudioSource>,
-		"GetAudioListener", &Actor::GetComponent<CAudioListener>,
+		"ObtenerTransformador", &Actor::GetComponent<CTransform>,
+		"ObtenerObjetoFisico", &Actor::GetComponent<CPhysicalObject>,
+		"ObtenerCajaFisica", &Actor::GetComponent<CPhysicalBox>,
+		"ObtenerEsferaFisica", &Actor::GetComponent<CPhysicalSphere>,
+		"ObtenerCapsulaFisica", &Actor::GetComponent<CPhysicalCapsule>,
+		"ObtenerCamara", &Actor::GetComponent<CCamera>,
+		"ObtenerLuz", &Actor::GetComponent<CLight>,
+		"ObtenerPuntoDeLuz", &Actor::GetComponent<CPointLight>,
+		"ObtenerLugarDeLuz", &Actor::GetComponent<CSpotLight>,
+		"ObtenerLuzDireccional", &Actor::GetComponent<CDirectionalLight>,
+		"ObtenerCajaAmbientalDeLuz", &Actor::GetComponent<CAmbientBoxLight>,
+		"ObtenerEsferaAmbientalDeLuz", &Actor::GetComponent<CAmbientSphereLight>,
+		"ObtenerRenderDeModelo", &Actor::GetComponent<CModelRenderer>,
+		"ObtenerRenderDeMaterial", &Actor::GetComponent<CMaterialRenderer>,
+		"ObtenerRecursoDeAudio", &Actor::GetComponent<CAudioSource>,
+		"ObtenerAudioOyente", &Actor::GetComponent<CAudioListener>,
 
 		/* Behaviours relatives */
 		"GetBehaviour", [](Actor& p_this, const std::string& p_name) -> sol::table
@@ -74,39 +77,39 @@ void OvCore::Scripting::LuaActorBinder::BindActor(sol::state & p_luaState)
 		},
 
 		/* Components Creators */
-		"AddTransform", &Actor::AddComponent<CTransform>,
-		"AddModelRenderer", &Actor::AddComponent<CModelRenderer>,
-		"AddPhysicalBox", &Actor::AddComponent<CPhysicalBox>,
-		"AddPhysicalSphere", &Actor::AddComponent<CPhysicalSphere>,
-		"AddPhysicalCapsule", &Actor::AddComponent<CPhysicalCapsule>,
-		"AddCamera", &Actor::AddComponent<CCamera>,
-		"AddPointLight", &Actor::AddComponent<CPointLight>,
-		"AddSpotLight", &Actor::AddComponent<CSpotLight>,
-		"AddDirectionalLight", &Actor::AddComponent<CDirectionalLight>,
-		"AddAmbientBoxLight", &Actor::AddComponent<CAmbientBoxLight>,
-		"AddAmbientSphereLight", &Actor::AddComponent<CAmbientSphereLight>,
-		"AddMaterialRenderer", &Actor::AddComponent<CMaterialRenderer>,
-		"AddAudioSource", &Actor::AddComponent<CAudioSource>,
-		"AddAudioListener", &Actor::AddComponent<CAudioListener>,
+		"AgregarTransform", &Actor::AddComponent<CTransform>,
+		"AgregarModeloDeRender", &Actor::AddComponent<CModelRenderer>,
+		"AgregarCajaFisica", &Actor::AddComponent<CPhysicalBox>,
+		"AgregarEsferaFisica", &Actor::AddComponent<CPhysicalSphere>,
+		"AgregarCapsulaFisica", &Actor::AddComponent<CPhysicalCapsule>,
+		"AgregarCamara", &Actor::AddComponent<CCamera>,
+		"AgregarPuntoDeLuz", &Actor::AddComponent<CPointLight>,
+		"AgregarLugarDeLuz", &Actor::AddComponent<CSpotLight>,
+		"AgregarLuzDireccional", &Actor::AddComponent<CDirectionalLight>,
+		"AgregarCajaAmbientalDeLuz", &Actor::AddComponent<CAmbientBoxLight>,
+		"AgregarEsferaAmbientalDeLuz", &Actor::AddComponent<CAmbientSphereLight>,
+		"AgregarRenderDeMaterial", &Actor::AddComponent<CMaterialRenderer>,
+		"AgregarRecursoDeAudio", &Actor::AddComponent<CAudioSource>,
+		"AgregarAudioOyente", &Actor::AddComponent<CAudioListener>,
 
 		/* Components Destructors */
-		"RemoveModelRenderer", &Actor::RemoveComponent<CModelRenderer>,
-		"RemovePhysicalBox", &Actor::RemoveComponent<CPhysicalBox>,
-		"RemovePhysicalSphere", &Actor::RemoveComponent<CPhysicalSphere>,
-		"RemovePhysicalCapsule", &Actor::RemoveComponent<CPhysicalCapsule>,
-		"RemoveCamera", &Actor::RemoveComponent<CCamera>,
-		"RemovePointLight", &Actor::RemoveComponent<CPointLight>,
-		"RemoveSpotLight", &Actor::RemoveComponent<CSpotLight>,
-		"RemoveDirectionalLight", &Actor::RemoveComponent<CDirectionalLight>,
-		"RemoveAmbientBoxLight", &Actor::RemoveComponent<CAmbientBoxLight>,
-		"RemoveAmbientSphereLight", &Actor::RemoveComponent<CAmbientSphereLight>,
-		"RemoveMaterialRenderer", &Actor::RemoveComponent<CMaterialRenderer>,
-		"RemoveAudioSource", &Actor::RemoveComponent<CAudioSource>,
-		"RemoveAudioListener", &Actor::RemoveComponent<CAudioListener>,
-
+		"RemoverRenderDeModelo", &Actor::RemoveComponent<CModelRenderer>,
+		"RemoverCajaFisica", &Actor::RemoveComponent<CPhysicalBox>,
+		"RemoverEsferaFisica", &Actor::RemoveComponent<CPhysicalSphere>,
+		"RemoverCapsulaFisica", &Actor::RemoveComponent<CPhysicalCapsule>,
+		"RemoverCamara", &Actor::RemoveComponent<CCamera>,
+		"RemoverPuntoDeLuz", &Actor::RemoveComponent<CPointLight>,
+		"RemoverLugarDeLuz", &Actor::RemoveComponent<CSpotLight>,
+		"RemoverLuzDireccional", &Actor::RemoveComponent<CDirectionalLight>,
+		"RemoverCajaAmbientalDeLuz", &Actor::RemoveComponent<CAmbientBoxLight>,
+		"RemoverEsferaAmbientalDeLuz", &Actor::RemoveComponent<CAmbientSphereLight>,
+		"RemoverRenderDeMaterial", &Actor::RemoveComponent<CMaterialRenderer>,
+		"RemoverRecursoDeAudio", &Actor::RemoveComponent<CAudioSource>,
+		"RemoverAudioOyente", &Actor::RemoveComponent<CAudioListener>,
+			 
 		/* Behaviour management */
-		"AddBehaviour", &Actor::AddBehaviour,
-		"RemoveBehaviour", sol::overload
+		"AgregarBehaviour", &Actor::AddBehaviour,
+		"RemoverBehaviour", sol::overload
 		(
 			sol::resolve<bool(Behaviour&)>(&Actor::RemoveBehaviour),
 			sol::resolve<bool(const std::string&)>(&Actor::RemoveBehaviour)
