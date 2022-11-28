@@ -31,7 +31,7 @@ class ProjectHubPanel : public OvUI::Panels::PanelWindow
 {
 public:
 	ProjectHubPanel(bool& p_readyToGo, std::string& p_path, std::string& p_projectName) :
-		PanelWindow("Overload - Project Hub", true),
+		PanelWindow("ERLEngine - HUB (V1)", true),
 		m_readyToGo(p_readyToGo),
 		m_path(p_path),
 		m_projectName(p_projectName)
@@ -42,13 +42,15 @@ public:
 
 		std::filesystem::create_directories(std::string(getenv("APPDATA")) + "\\OverloadTech\\OvEditor\\");
 
-		SetSize({ 1000, 580 });
+		SetSize({ 1100, 580 });
 		SetPosition({ 0.f, 0.f });
 
-		auto& openProjectButton = CreateWidget<OvUI::Widgets::Buttons::Button>("Open Project");
-		auto& newProjectButton = CreateWidget<OvUI::Widgets::Buttons::Button>("New Project");
+		auto& Info = CreateWidget<OvUI::Widgets::Texts::Text>("Proyecto");
+
+		auto& openProjectButton = CreateWidget<OvUI::Widgets::Buttons::Button>("Abrir");
+		auto& newProjectButton = CreateWidget<OvUI::Widgets::Buttons::Button>("Nuevo");
 		auto& pathField = CreateWidget<OvUI::Widgets::InputFields::InputText>("");
-		m_goButton = &CreateWidget<OvUI::Widgets::Buttons::Button>("GO");
+		m_goButton = &CreateWidget<OvUI::Widgets::Buttons::Button>("Crear");
 
 		pathField.ContentChangedEvent += [this, &pathField](std::string p_content)
 		{
@@ -62,8 +64,8 @@ public:
 
 		UpdateGoButton("");
 
-		openProjectButton.idleBackgroundColor = { 0.7f, 0.5f, 0.f };
-		newProjectButton.idleBackgroundColor = { 0.f, 0.5f, 0.0f };
+		openProjectButton.idleBackgroundColor = { 0.1f, 0.1f, 0.1f };
+		newProjectButton.idleBackgroundColor = { 0.1f, 0.1f, 0.1f };
 
 		openProjectButton.ClickedEvent += [this]
 		{
@@ -83,7 +85,7 @@ public:
 
 		newProjectButton.ClickedEvent += [this, &pathField]
 		{
-			OvWindowing::Dialogs::SaveFileDialog dialog("New project location");
+			OvWindowing::Dialogs::SaveFileDialog dialog("Proyecto Nuevo");
 			dialog.DefineExtension("Overload Project", "..");
 			dialog.Show();
 			if (dialog.HasSucceeded())
@@ -128,11 +130,11 @@ public:
 				{
 					auto& text = columns.CreateWidget<OvUI::Widgets::Texts::Text>(line);
 					auto& actions = columns.CreateWidget<OvUI::Widgets::Layout::Group>();
-					auto& openButton = actions.CreateWidget<OvUI::Widgets::Buttons::Button>("Open");
-					auto& deleteButton = actions.CreateWidget<OvUI::Widgets::Buttons::Button>("Delete");
+					auto& openButton = actions.CreateWidget<OvUI::Widgets::Buttons::Button>("Abrir");
+					auto& deleteButton = actions.CreateWidget<OvUI::Widgets::Buttons::Button>("Borrar");
 
-					openButton.idleBackgroundColor = { 0.7f, 0.5f, 0.f };
-					deleteButton.idleBackgroundColor = { 0.5f, 0.f, 0.f };
+					openButton.idleBackgroundColor = { 0.1f, 0.1f, 0.1f };
+					deleteButton.idleBackgroundColor = { 0.1f, 0.1f, 0.1f };
 
 					openButton.ClickedEvent += [this, line]
 					{
@@ -279,8 +281,8 @@ void OvEditor::Core::ProjectHub::SetupContext()
 	/* Settings */
 	OvWindowing::Settings::DeviceSettings deviceSettings;
 	OvWindowing::Settings::WindowSettings windowSettings;
-	windowSettings.title = "Overload - Project Hub";
-	windowSettings.width = 1000;
+	windowSettings.title = "ERLEngine - HUB (V1)";
+	windowSettings.width = 1100;
 	windowSettings.height = 580;
 	windowSettings.maximized = false;
 	windowSettings.resizable = false;

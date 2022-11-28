@@ -57,9 +57,11 @@
 #include <OvTools/Utils/PathParser.h>
 #include <OvTools/Utils/String.h>
 #include <OvTools/Utils/SystemCalls.h>
+#include <OvDebug/Logger.h>
+#include "DestroyTime.h"
 
-
-
+#include "OvCore/ResourceManagement/ModelManager.h"
+#include "OvCore/ResourceManagement/MaterialManager.h"
 
 
 using namespace std;
@@ -75,6 +77,9 @@ using namespace OvRendering::Resources;
 
 float timeOutTotal;
 float DefaultTime;
+
+float TimeTotalDestroy;
+float DefaultDestroytime;
 
 CParticles::CParticles(ECS::Actor& p_owner) : AComponent(p_owner)
 {
@@ -130,7 +135,7 @@ void CParticles::OnInspector(WidgetContainer& p_root)
 	GUIDrawer::DrawScalar<float>(p_root, "Particles Speed", std::bind(&CParticles::ParticlesSpeed, this), std::bind(&CParticles::SetParticlesSpeed, this, std::placeholders::_1), 0.01f, 0.0f, 1.0f);
 	GUIDrawer::DrawScalar<float>(p_root, "Destroy Time", DestroyTime, 0.005f, 0.f);
 	GUIDrawer::DrawScalar<float>(p_root, "Instance Time", std::bind(&CParticles::InstanceTime, this), std::bind(&CParticles::SetInstanceTime, this, std::placeholders::_1), 0.01f, 0.0f, 1000.0f);
-	GUIDrawer::DrawScalar<float>(p_root, "Open Angle", std::bind(&CParticles::OpenAngle, this), std::bind(&CParticles::SetOpenAngle, this, std::placeholders::_1), 0.01f, 0.0f, 1000.0f);
+	GUIDrawer::DrawScalar<float>(p_root, "Open Angle", std::bind(&CParticles::OpenAngle, this), std::bind(&CParticles::SetOpenAngle, this, std::placeholders::_1), 0.01f, 0.1f, 1000.0f);
 	GUIDrawer::DrawVec3(p_root, "Direction", Direction, 0.1f);
 }
 
@@ -139,23 +144,60 @@ void CParticles::OnFixedUpdate (float deltaTime)
 	timeOutTotal -= 0.1f / 10;
 
 	if (timeOutTotal <= 0.0f) {
+		Actor& NewParticleModel = ServiceLocator::Get<SceneManager>().GetCurrentScene()->CreateActor("Particle");
+		NewParticleModel.transform.ScaleLocal (OvMaths::FVector3 (0.3f, 0.3f, 0.3f));
 
-		Actor& foo = ServiceLocator::Get<SceneManager>().GetCurrentScene()->CreateActor("Particle");
-		foo.SetName(to_string(owner.GetChildren().size()));
-		foo.SetParent(owner);
+		auto& MaterialsManager = ServiceLocator::Get<OvCore::ResourceManagement::MaterialManager>();
+		auto& ModelManager = ServiceLocator::Get<OvCore::ResourceManagement::ModelManager>();
 
-		OvMaths::FQuaternion NewRotation = OvMaths::FQuaternion(15.f, 15.f, 15.f, 0.f);
-		foo.transform.SetLocalRotation(NewRotation);
+		auto& NewMaterial = NewParticleModel.AddComponent<CMaterialRenderer>();
+		const auto mat = MaterialsManager[":Materials\\Default.ovmat"];
+
+		if (mat) {
+			NewMaterial.FillWithMaterial(*mat);
+			OVLOG_INFO ("EL MATERIAL SI SE GENERO");
+		}
+
+		auto& NewModelRender = NewParticleModel.AddComponent <CModelRenderer>();
+		const auto m_Model = ModelManager[":Models\\Sphere.fbx"];
+
+		NewModelRender.SetModel(m_Model);
+		
+		auto& NewPhysical = NewParticleModel.AddComponent<CPhysicalSphere>();
+		NewPhysical.SetKinematic(true);
+		NewPhysical.SetRadius (0.3f);
+
+		NewParticleModel.SetName(to_string(owner.GetChildren().size()));
+		NewParticleModel.SetParent(owner);
+
+		OvMaths::FQuaternion NewRotation = OvMaths::FQuaternion(0.1f, 0.1f, 0.1f, 0.1f);;
+
+		if (OpenAngle <= 0.1f) {
+			NewRotation = OvMaths::FQuaternion (0.1f, 0.1f, 0.1f, 0.1f);
+		}
+		else {
+			NewRotation = OvMaths::FQuaternion(RandomFloatGenerate(0, OpenAngle), RandomFloatGenerate(0, OpenAngle),
+											   RandomFloatGenerate(0, OpenAngle), RandomFloatGenerate(0, OpenAngle));
+		}
+
+		string random = "Random Generado: ";
+		string r = random.append (to_string (RandomFloatGenerate(0, OpenAngle)));
+
+
+		OVLOG_INFO (r);
+
+		NewParticleModel.transform.SetWorldRotation (NewRotation);
+		NewParticleModel.AddComponent<OvCore::ECS::Components::DestroyTime>().SetTime (DestroyTime);
 
 		timeOutTotal = DefaultTime;
 	}
 
-	//MOVE PARTICLES
-
 	for (int i = 0; i < owner.GetChildren().size(); i++) {
 		Actor* FD = owner.GetChildren()[i];
-		FD->SetName ("Particle FX");
-		FD->transform.SetLocalPosition (FD->transform.GetLocalPosition().Forward * ParticlesSpeed * deltaTime);
+		FD->SetName ("Particle FX (Not Touch)");
+
+		OvMaths::FVector3 dir = owner.transform.GetWorldPosition() - FD->transform.GetWorldPosition();
+		FD->transform.SetWorldPosition(FD->transform.GetWorldPosition() + FD->transform.GetWorldForward() * ParticlesSpeed * deltaTime);
 	}
 }
 
@@ -165,6 +207,9 @@ void CParticles::OnEnable()
 	DefaultTime = InstanceTime;
 	DefaultTime = timeOutTotal;
 	timeOutTotal = 0;
+
+	TimeTotalDestroy = DestroyTime;
+	DefaultDestroytime = TimeTotalDestroy;
 }
 
 void CParticles::OnDisable()
@@ -175,4 +220,9 @@ void CParticles::OnDisable()
 void CParticles::Update() 
 {
 	
+}
+
+float CParticles::RandomFloatGenerate (float min, float max) 
+{
+	return ((float)rand() / RAND_MAX) * (max - min) + min;
 }

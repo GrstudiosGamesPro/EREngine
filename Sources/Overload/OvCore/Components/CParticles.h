@@ -17,6 +17,14 @@
 
 #include "OvCore/ECS/Components/CPointLight.h"
 
+#include <OvWindowing/Dialogs/OpenFileDialog.h>
+#include <OvWindowing/Dialogs/SaveFileDialog.h>
+#include <OvWindowing/Dialogs/MessageBox.h>
+
+#include <OvTools/Utils/PathParser.h>
+#include <OvTools/Utils/String.h>
+#include <OvTools/Utils/SystemCalls.h>
+
 namespace OvCore::ECS { class Actor; }
 
 namespace OvCore::ECS::Components
@@ -28,10 +36,11 @@ namespace OvCore::ECS::Components
 		std::string GetName() override;
 
 	public:
-		float ParticlesSpeed;
-		float DestroyTime;
-		float InstanceTime;
-		float OpenAngle;
+		float ParticlesSpeed = 1;
+		float DestroyTime = 3;
+		float InstanceTime = 1;
+		float OpenAngle = 15;
+
 		OvMaths::FVector3 Direction = OvMaths::FVector3(0, 0, 0);
 
 	private:
@@ -52,5 +61,6 @@ namespace OvCore::ECS::Components
 		void SetDirection(OvMaths::FVector3 Dir);
 		void SetInstanceTime(float p_Time);
 		void SetOpenAngle(float p_Angle);
+		float RandomFloatGenerate (float p_RangeMin, float p_RangeMax);
 	};
 }

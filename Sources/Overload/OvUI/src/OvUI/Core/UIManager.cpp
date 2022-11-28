@@ -51,9 +51,13 @@ void OvUI::Core::UIManager::ApplyStyle(Styling::EStyle p_style)
 		style->GrabMinSize = 5.0f;
 		style->GrabRounding = 3.0f;
 
-		style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
+		style->WindowBorderSize = 1.0f;
+		style->FrameBorderSize  = 1.0f;
+		style->PopupBorderSize  = 1.0f;
+
+		style->Colors[ImGuiCol_Text] = ImVec4(1.f, 1.f, 1.f, 1.00f);
 		style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-		style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+		style->Colors[ImGuiCol_WindowBg] = ImVec4(0.5f, 0.5f, 0.5f, 1.00f);
 		style->Colors[ImGuiCol_ChildBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 		style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 		style->Colors[ImGuiCol_Border] = ImVec4(0.2f, 0.2f, 0.2f, 0.88f);
@@ -110,14 +114,14 @@ void OvUI::Core::UIManager::ApplyStyle(Styling::EStyle p_style)
         style->ChildRounding = 0.0f;
         style->PopupRounding = 0.0f;
 
-        style->WindowBorderSize = 1.0f;
+        style->WindowBorderSize = 0.0f;
         style->FrameBorderSize = 0.0f;
         style->PopupBorderSize = 1.0f;
 
         ImVec4* colors = ImGui::GetStyle().Colors;
-        colors[ImGuiCol_Text] = ImVec4(0.96f, 0.96f, 0.99f, 1.00f);
+        colors[ImGuiCol_Text] = ImVec4(1.f, 1.f, 1.f, 1.00f);
         colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-        colors[ImGuiCol_WindowBg] = ImVec4(0.09f, 0.09f, 0.10f, 1.00f);
+        colors[ImGuiCol_WindowBg] = ImVec4(0.5f, 0.5f, 0.5f, 1.00f);
         colors[ImGuiCol_ChildBg] = ImVec4(0.09f, 0.09f, 0.10f, 1.00f);
         colors[ImGuiCol_PopupBg] = ImVec4(0.06f, 0.06f, 0.07f, 1.00f);
         colors[ImGuiCol_Border] = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
