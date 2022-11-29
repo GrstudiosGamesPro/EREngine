@@ -22,6 +22,7 @@
 #include "OvCore/ECS/Components/CMaterialRenderer.h"
 #include "OvCore/ECS/Components/CAudioSource.h"
 #include "OvCore/ECS/Components/CAudioListener.h"
+#include "../Components/CParticles.h";
 
 void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaState)
 {
@@ -33,18 +34,33 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 		"ObtenerLIDER", [](AComponent& p_component) -> Actor& { return p_component.owner; }
 	);
 
+	p_luaState.new_usertype <CParticles>("Particulas",
+		sol::base_classes, sol::bases<AComponent>(),
+		"CambiarVelocidad", &CParticles::SetParticlesSpeed,
+		"CambiarAnguloDeApertura", &CParticles::SetOpenAngle,
+		"CambiarTiempoDeDestruccion", &CParticles::SetDestroyTime,
+		"CambiarTiempoDeCreacion", &CParticles::SetInstanceTime,
+		"CambiarUsoDeColision", &CParticles::UseColision,
+
+		"ObtenerVelocidad", &CParticles::GetParticlesSpeed,
+		"ObtenerAnguloDeApertura", &CParticles::GetOpenAngle,
+		"ObtenerTiempoDeDestruccion", &CParticles::GetDestroyTime,
+		"ObtenerTiempoDeCreacion", &CParticles::GetInstanceTime,
+		"ObtenerUsoDeColisiones", &CParticles::GetColisionUse
+		);
+
 	p_luaState.new_usertype<CTransform>("Transformador",
 		sol::base_classes, sol::bases<AComponent>(),
 		/* Methods */
-		"SeleccionarPosicion", &CTransform::SetLocalPosition,
-		"SeleccionarRotacion", &CTransform::SetLocalRotation,
-		"SeleccionarEscala", &CTransform::SetLocalScale,
-		"SeleccionarPosicionLocal", &CTransform::SetLocalPosition,
-		"SeleccionarRotacionLocal", &CTransform::SetLocalRotation,
-		"SeleccionarEscalaLocal", &CTransform::SetLocalScale,
-		"SeleccionarPosicionDeMundo", &CTransform::SetWorldPosition,
-		"SeleccionarRotacionDeMundo", &CTransform::SetWorldRotation,
-		"SeleccionarEscalaDeMundo", &CTransform::SetWorldScale,
+		"CambiarPosicion", &CTransform::SetLocalPosition,
+		"CambiarRotacion", &CTransform::SetLocalRotation,
+		"CambiarEscala", &CTransform::SetLocalScale,
+		"CambiarPosicionLocal", &CTransform::SetLocalPosition,
+		"CambiarRotacionLocal", &CTransform::SetLocalRotation,
+		"CambiarEscalaLocal", &CTransform::SetLocalScale,
+		"CambiarPosicionDeMundo", &CTransform::SetWorldPosition,
+		"CambiarRotacionDeMundo", &CTransform::SetWorldRotation,
+		"CambiarEscalaDeMundo", &CTransform::SetWorldScale,
 		"ObtenerPosicion", [](CTransform& p_this) -> FVector3 { return p_this.GetWorldPosition(); },
 		"ObtenerRotacion", [](CTransform& p_this) -> FQuaternion { return p_this.GetWorldRotation(); },
 		"ObtenerEscala", [](CTransform& p_this) -> FVector3 { return p_this.GetWorldScale(); },
@@ -77,15 +93,15 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 	p_luaState.new_usertype<CModelRenderer>("ModeloDeRender",
 		sol::base_classes, sol::bases<AComponent>(),
 		"ObtenerModelo", &CModelRenderer::GetModel,
-		"SeleccionarModelo", &CModelRenderer::SetModel,
+		"CambiarModelo", &CModelRenderer::SetModel,
 		"ObtenerComportamientoDeFrustum", &CModelRenderer::GetFrustumBehaviour,
-		"SeleccionarComportamientoDeFrustum", &CModelRenderer::SetFrustumBehaviour
+		"CambiarComportamientoDeFrustum", &CModelRenderer::SetFrustumBehaviour
 	);
 
 	p_luaState.new_usertype<CMaterialRenderer>("MaterialDeRender",
 		sol::base_classes, sol::bases<AComponent>(),
-		"SeleccionarMaterial", &CMaterialRenderer::SetMaterialAtIndex,
-		"SeleccionarMatrizDeElementosDeUsuario", &CMaterialRenderer::SetUserMatrixElement,
+		"CambiarMaterial", &CMaterialRenderer::SetMaterialAtIndex,
+		"CambiarMatrizDeElementosDeUsuario", &CMaterialRenderer::SetUserMatrixElement,
 		"ObtenerMatrizDeElementosDeUsurario", &CMaterialRenderer::GetUserMatrixElement
 	);
 
@@ -98,47 +114,47 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 	p_luaState.new_usertype<CPhysicalObject>("FisicasObjetos",
 		sol::base_classes, sol::bases<AComponent>(),
 		"ObtenerMasa", &CPhysicalObject::GetMass,
-		"SeleccionarMasa", &CPhysicalObject::SetMass,
+		"CambiarMasa", &CPhysicalObject::SetMass,
 		"ObtenerFriccion", &CPhysicalObject::GetFriction,
-		"SeleccionarFriccion", &CPhysicalObject::SetFriction,
+		"CambiarFriccion", &CPhysicalObject::SetFriction,
 		"ObtenerRebote", &CPhysicalObject::GetBounciness,
-		"SeleccionarRebote", &CPhysicalObject::SetBounciness,
-		"SeleccionarVelocidadLineal", &CPhysicalObject::SetLinearVelocity,
-		"SeleccionarVelocidadAngular", &CPhysicalObject::SetAngularVelocity,
+		"CambiarRebote", &CPhysicalObject::SetBounciness,
+		"CambiarVelocidadLineal", &CPhysicalObject::SetLinearVelocity,
+		"CambiarVelocidadAngular", &CPhysicalObject::SetAngularVelocity,
 		"ObtenerVelocidadLineal", &CPhysicalObject::GetLinearVelocity,
 		"ObtenerVelocidadAngular", &CPhysicalObject::GetAngularVelocity,
-		"SeleccionarFactorLineal", &CPhysicalObject::SetLinearFactor,
-		"SeleccionarFactorAngular", &CPhysicalObject::SetAngularFactor,
+		"CambiarFactorLineal", &CPhysicalObject::SetLinearFactor,
+		"CambiarFactorAngular", &CPhysicalObject::SetAngularFactor,
 		"ObtenerFactorLineal", &CPhysicalObject::GetLinearFactor,
 		"ObtenerFactorAngular", &CPhysicalObject::GetAngularFactor,
 		"EsColisionador", &CPhysicalObject::IsTrigger,
-		"SeleccionarColisionador", &CPhysicalObject::SetTrigger,
+		"UsarColisionDeInteraccion", &CPhysicalObject::SetTrigger,
 		"AgregarFuerza", &CPhysicalObject::AddForce,
 		"AgregarImpulso", &CPhysicalObject::AddImpulse,
 		"EliminarFuerzas", &CPhysicalObject::ClearForces,
-		"SeleccionarDectorDeColisiones", &CPhysicalObject::SetCollisionDetectionMode,
+		"CambiarDectorDeColisiones", &CPhysicalObject::SetCollisionDetectionMode,
 		"ObtenerModoDeColision", &CPhysicalObject::GetCollisionDetectionMode,
-		"SeleccionarKinematic", &CPhysicalObject::SetKinematic
+		"CambiarKinematic", &CPhysicalObject::SetKinematic
 		);
 
 	p_luaState.new_usertype<CPhysicalBox>("PhysicalBox",
 		sol::base_classes, sol::bases<CPhysicalObject>(),
 		"ObtenerSize", &CPhysicalBox::GetSize,
-		"SeleccionarSize", &CPhysicalBox::SetSize
+		"CambiarSize", &CPhysicalBox::SetSize
 		);
 
 	p_luaState.new_usertype<CPhysicalSphere>("PhysicalSphere",
 		sol::base_classes, sol::bases<CPhysicalObject>(),
 		"ObtenerRadio", &CPhysicalSphere::GetRadius,
-		"SeleccionarRadio", &CPhysicalSphere::SetRadius
+		"CambiarRadio", &CPhysicalSphere::SetRadius
 		);
 
 	p_luaState.new_usertype<CPhysicalCapsule>("PhysicalCapsule",
 		sol::base_classes, sol::bases<CPhysicalObject>(),
 		"ObtenerRadio", &CPhysicalCapsule::GetRadius,
-		"SeleccionarRadio", &CPhysicalCapsule::SetRadius,
-		"ObtenerAlto", &CPhysicalCapsule::GetHeight,
-		"SeleccionarAlto", &CPhysicalCapsule::SetHeight
+		"CambiarRadio", &CPhysicalCapsule::SetRadius,
+		"ObtenerAltura", &CPhysicalCapsule::GetHeight,
+		"CambiarAltura", &CPhysicalCapsule::SetHeight
 		);
 
     p_luaState.new_enum<OvRendering::Settings::EProjectionMode>("ProjectionMode",
@@ -154,25 +170,25 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 		"ObtenerCerca", &CCamera::GetNear,
 		"ObtenerLejos", &CCamera::GetFar,
 		"ObtenerColorDespejado", &CCamera::GetClearColor,
-		"SeleccionarFov", &CCamera::SetFov,
-		"SeleccionarSize", &CCamera::SetSize,
-		"SeleccionarCerca", &CCamera::SetNear,
-		"SeleccionarLejos", &CCamera::SetFar,
-		"SeleccionarColorDespejado", &CCamera::SetClearColor,
+		"CambiarFov", &CCamera::SetFov,
+		"CambiarSize", &CCamera::SetSize,
+		"CambiarCerca", &CCamera::SetNear,
+		"CambiarLejos", &CCamera::SetFar,
+		"CambiarColorDespejado", &CCamera::SetClearColor,
         "HasFrustumGeometryCulling", &CCamera::HasFrustumGeometryCulling,
         "HasFrustumLightCulling", &CCamera::HasFrustumLightCulling,
         "ObtenerModoProyeccion", &CCamera::GetProjectionMode,
         "SetFrustumGeometryCulling", &CCamera::SetFrustumGeometryCulling,
         "SetFrustumLightCulling", &CCamera::SetFrustumLightCulling,
-        "SeleccionarModoProyeccion", &CCamera::SetProjectionMode
+        "CambiarModoProyeccion", &CCamera::SetProjectionMode
 		);
 
 	p_luaState.new_usertype<CLight>("Luz",
 		sol::base_classes, sol::bases<AComponent>(),
 		"ObtenerColor", &CPointLight::GetColor,
 		"ObtenerIntensidad", &CPointLight::GetIntensity,
-		"SeleccionarColor", &CPointLight::SetColor,
-		"SeleccionarIntensidad", &CPointLight::SetIntensity
+		"CambiarColor", &CPointLight::SetColor,
+		"CambiarIntensidad", &CPointLight::SetIntensity
 		);
 
 	p_luaState.new_usertype<CPointLight>("PuntoDeLuz",
@@ -180,9 +196,9 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 		"ObtenerConstante", &CPointLight::GetConstant,
 		"ObtenerLineal", &CPointLight::GetLinear,
 		"ObtenerCuadratica", &CPointLight::GetQuadratic,
-		"SeleccionarConstante", &CPointLight::SetConstant,
-		"SeleccionarLineal", &CPointLight::SetLinear,
-		"SeleccionarCuadratica", &CPointLight::SetQuadratic
+		"CambiarConstante", &CPointLight::SetConstant,
+		"CambiarLineal", &CPointLight::SetLinear,
+		"CambiarCuadratica", &CPointLight::SetQuadratic
 		);
 
 	p_luaState.new_usertype<CSpotLight>("LugarDeLuz",
@@ -192,23 +208,23 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 		"ObtenerCuadratica", &CSpotLight::GetQuadratic,
 		"ObtenerCorte", &CSpotLight::GetCutoff,
 		"ObtenerCorteExterno", &CSpotLight::GetOuterCutoff,
-		"SeleccionarConstante", &CSpotLight::SetConstant,
-		"SeleccionarLineal", &CSpotLight::SetLinear,
-		"SeleccionarCuadratica", &CSpotLight::SetQuadratic,
-		"SeleccionarCorte", &CSpotLight::SetCutoff,
-		"SeleccionarCorteExterno", &CSpotLight::SetOuterCutoff
+		"CambiarConstante", &CSpotLight::SetConstant,
+		"CambiarLineal", &CSpotLight::SetLinear,
+		"CambiarCuadratica", &CSpotLight::SetQuadratic,
+		"CambiarCorte", &CSpotLight::SetCutoff,
+		"CambiarCorteExterno", &CSpotLight::SetOuterCutoff
 		);
 
 	p_luaState.new_usertype<CAmbientBoxLight>("CajaAmbientalDeLuz",
 		sol::base_classes, sol::bases<CLight>(),
 		"ObtenerSize", &CAmbientBoxLight::GetSize,
-		"SeleccionarSize", &CAmbientBoxLight::SetSize
+		"CambiarSize", &CAmbientBoxLight::SetSize
 		);
 
 	p_luaState.new_usertype<CAmbientSphereLight>("EsferaAmbientalDeLuz",
 		sol::base_classes, sol::bases<CLight>(),
 		"ObtenerRadio", &CAmbientSphereLight::GetRadius,
-		"SeleccionarRadio", &CAmbientSphereLight::SetRadius
+		"CambiarRadio", &CAmbientSphereLight::SetRadius
 		);
 
 	p_luaState.new_usertype<CDirectionalLight>("LuzDireccional",
@@ -229,13 +245,13 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 		"EstaTerminado", &CAudioSource::IsFinished,
 		"EsEspacial", &CAudioSource::IsSpatial,
 		"ObtenerUmbralDeAtenuacion", &CAudioSource::GetAttenuationThreshold,
-		"SeleccionarSonido", &CAudioSource::SetSound,
-		"SeleccionarVolumen", &CAudioSource::SetVolume,
-		"SeleccionarPan", &CAudioSource::SetPan,
-		"SeleccionarLooped", &CAudioSource::SetLooped,
-		"SeleccionarPitch", &CAudioSource::SetPitch,
-		"SeleccionarEspacial", &CAudioSource::SetSpatial,
-		"SeleccionarUmbralDeAtenuacion", &CAudioSource::SetAttenuationThreshold
+		"CambiarSonido", &CAudioSource::SetSound,
+		"CambiarVolumen", &CAudioSource::SetVolume,
+		"CambiarPan", &CAudioSource::SetPan,
+		"CambiarLooped", &CAudioSource::SetLooped,
+		"CambiarPitch", &CAudioSource::SetPitch,
+		"CambiarEspacial", &CAudioSource::SetSpatial,
+		"CambiarUmbralDeAtenuacion", &CAudioSource::SetAttenuationThreshold
 		);
 
 	p_luaState.new_usertype<CAudioListener>("AudioListener",

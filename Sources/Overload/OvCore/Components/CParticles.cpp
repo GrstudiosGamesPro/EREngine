@@ -152,6 +152,32 @@ void CParticles::UseColision (bool Val)
 	UseCollision = Val;
 }
 
+//OBTENER VALORES
+bool CParticles::GetColisionUse() 
+{
+	return UseCollision;
+}
+
+float CParticles::GetParticlesSpeed()
+{
+	return ParticlesSpeed;
+}
+
+float CParticles::GetDestroyTime()
+{
+	return DestroyTime;
+}
+
+float CParticles::GetInstanceTime()
+{
+	return InstanceTime;
+}
+
+float CParticles::GetOpenAngle()
+{
+	return OpenAngle;
+}
+
 void CParticles::SetModel(OvRendering::Resources::Model* p_model)
 {
 	m_model = p_model;

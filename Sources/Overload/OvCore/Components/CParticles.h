@@ -70,6 +70,13 @@ namespace OvCore::ECS::Components
 		void SetModel(OvRendering::Resources::Model* p_model);
 		void SetNewMaterial (OvCore::Resources::Material* p_material);
 		void UseColision (bool p_Col);
+		
+		//OBTENER VALORES
+		float GetParticlesSpeed();
+		float GetDestroyTime();
+		float GetInstanceTime();
+		float GetOpenAngle();
+		bool GetColisionUse();
 
 		float RandomFloatGenerate (float p_RangeMin, float p_RangeMax);
 	};

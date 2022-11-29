@@ -22,6 +22,7 @@
 #include "OvCore/ECS/Components/CMaterialRenderer.h"
 #include "OvCore/ECS/Components/CAudioSource.h"
 #include "OvCore/ECS/Components/CAudioListener.h"
+#include "../Components/CParticles.h"
 
 void OvCore::Scripting::LuaActorBinder::BindActor(sol::state & p_luaState)
 {
@@ -65,6 +66,7 @@ void OvCore::Scripting::LuaActorBinder::BindActor(sol::state & p_luaState)
 		"ObtenerRenderDeMaterial", &Actor::GetComponent<CMaterialRenderer>,
 		"ObtenerRecursoDeAudio", &Actor::GetComponent<CAudioSource>,
 		"ObtenerAudioOyente", &Actor::GetComponent<CAudioListener>,
+		"ObtenerParticulas", & Actor::GetComponent<CParticles>,
 
 		/* Behaviours relatives */
 		"GetBehaviour", [](Actor& p_this, const std::string& p_name) -> sol::table
@@ -91,6 +93,7 @@ void OvCore::Scripting::LuaActorBinder::BindActor(sol::state & p_luaState)
 		"AgregarRenderDeMaterial", &Actor::AddComponent<CMaterialRenderer>,
 		"AgregarRecursoDeAudio", &Actor::AddComponent<CAudioSource>,
 		"AgregarAudioOyente", &Actor::AddComponent<CAudioListener>,
+		"AgregarParticulas", & Actor::AddComponent<CParticles>,
 
 		/* Components Destructors */
 		"RemoverRenderDeModelo", &Actor::RemoveComponent<CModelRenderer>,
@@ -106,7 +109,8 @@ void OvCore::Scripting::LuaActorBinder::BindActor(sol::state & p_luaState)
 		"RemoverRenderDeMaterial", &Actor::RemoveComponent<CMaterialRenderer>,
 		"RemoverRecursoDeAudio", &Actor::RemoveComponent<CAudioSource>,
 		"RemoverAudioOyente", &Actor::RemoveComponent<CAudioListener>,
-			 
+		"RemoverParticulas", & Actor::RemoveComponent<CParticles>,
+
 		/* Behaviour management */
 		"AgregarBehaviour", &Actor::AddBehaviour,
 		"RemoverBehaviour", sol::overload
