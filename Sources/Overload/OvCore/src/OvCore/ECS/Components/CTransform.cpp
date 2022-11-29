@@ -17,7 +17,7 @@ AComponent(p_owner)
 
 std::string OvCore::ECS::Components::CTransform::GetName()
 {
-	return "Transform";
+	return "Transformador";
 }
 
 void OvCore::ECS::Components::CTransform::SetParent(CTransform& p_parent)
