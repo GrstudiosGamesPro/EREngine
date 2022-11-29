@@ -64,6 +64,7 @@ void OvCore::Scripting::LuaComponentBinder::BindComponent(sol::state & p_luaStat
 		"GetWorldUp", &CTransform::GetWorldUp,
 		"GetWorldRight", &CTransform::GetWorldRight
 		);
+
     
     p_luaState.new_enum<OvCore::ECS::Components::CModelRenderer::EFrustumBehaviour>("FrustumBehaviour",
         {

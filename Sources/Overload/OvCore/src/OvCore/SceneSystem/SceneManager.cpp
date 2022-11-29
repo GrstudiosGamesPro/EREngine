@@ -51,6 +51,11 @@ void OvCore::SceneSystem::SceneManager::LoadEmptyScene()
 	SceneLoadEvent.Invoke();
 }
 
+void OvCore::SceneSystem::SceneManager::SetCharacterController (ECS::Actor* p_Character)
+{
+	CharacterController = p_Character;
+}
+
 void OvCore::SceneSystem::SceneManager::LoadEmptyLightedScene()
 {
 	UnloadCurrentScene();

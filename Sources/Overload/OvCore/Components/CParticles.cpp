@@ -83,11 +83,23 @@ float DefaultDestroytime;
 
 CParticles::CParticles(ECS::Actor& p_owner) : AComponent(p_owner)
 {
+	auto& ModelManager = ServiceLocator::Get<OvCore::ResourceManagement::ModelManager>();
+	const auto m_Model = ModelManager[":Models\\Plane.fbx"];
+	m_model = m_Model;
 
+
+	m_modelChangedEvent += [this]
+	{
+		if (auto materialRenderer = owner.GetComponent<CMaterialRenderer>())
+			materialRenderer->UpdateMaterialList();
+	};
+
+	auto MaterialManager = ServiceLocator::Get<OvCore::ResourceManagement::MaterialManager>();
+	m_material = MaterialManager[":Materials\\Default.ovmat"];
 }
 
 std::string CParticles::GetName() {
-	return "Particles System";
+	return "Sistema De Particulas";
 }
 
 void CParticles::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
@@ -97,6 +109,8 @@ void CParticles::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_
 	Serializer::SerializeFloat		(p_doc, p_node, "DestroyTimeSpeed", ParticlesSpeed);
 	Serializer::SerializeFloat		(p_doc, p_node, "OpenAngle", OpenAngle);
 	Serializer::SerializeVec3		(p_doc, p_node, "Direction", Direction);
+	Serializer::SerializeModel	    (p_doc, p_node, "CurrentModel", m_model);
+	Serializer::SerializeBoolean	(p_doc, p_node, "UseCol", UseCollision);
 }
 
 void CParticles::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
@@ -106,6 +120,8 @@ void CParticles::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* 
 	SetOpenAngle (Serializer::DeserializeFloat				 (p_doc, p_node, "OpenAngle"));
 	SetInstanceTime (Serializer::DeserializeFloat			 (p_doc, p_node, "InstanceTime"));
 	SetDirection(Serializer::DeserializeVec3				 (p_doc, p_node, "Direction"));
+	SetModel(Serializer::DeserializeModel                    (p_doc, p_node, "CurrentModel"));
+	UseColision (Serializer::DeserializeBoolean              (p_doc, p_node, "UseCol"));
 }
 
 void CParticles::SetOpenAngle (float p_Angle) 
@@ -129,14 +145,41 @@ void CParticles::SetInstanceTime(float p_Time) {
 	InstanceTime = p_Time;
 }
 
+void CParticles::UseColision (bool Val)
+{
+	UseCollision = Val;
+}
+
+void CParticles::SetModel(OvRendering::Resources::Model* p_model)
+{
+	m_model = p_model;
+	m_modelChangedEvent.Invoke();
+	OVLOG_INFO ("Modelo De Particulas Cambiado");
+}
+
+void CParticles::SetNewMaterial (OvCore::Resources::Material& p_material)
+{
+	m_material = &p_material;
+	m_materialChangedEvent.Invoke();
+	OVLOG_INFO("Modelo De Particulas Cambiado");
+}
+
 
 void CParticles::OnInspector(WidgetContainer& p_root)
 {
-	GUIDrawer::DrawScalar<float>(p_root, "Particles Speed", std::bind(&CParticles::ParticlesSpeed, this), std::bind(&CParticles::SetParticlesSpeed, this, std::placeholders::_1), 0.01f, 0.0f, 1.0f);
-	GUIDrawer::DrawScalar<float>(p_root, "Destroy Time", DestroyTime, 0.005f, 0.f);
-	GUIDrawer::DrawScalar<float>(p_root, "Instance Time", std::bind(&CParticles::InstanceTime, this), std::bind(&CParticles::SetInstanceTime, this, std::placeholders::_1), 0.01f, 0.0f, 1000.0f);
-	GUIDrawer::DrawScalar<float>(p_root, "Open Angle", std::bind(&CParticles::OpenAngle, this), std::bind(&CParticles::SetOpenAngle, this, std::placeholders::_1), 0.01f, 0.1f, 1000.0f);
-	GUIDrawer::DrawVec3(p_root, "Direction", Direction, 0.1f);
+
+	GUIDrawer::DrawMesh     (p_root, "Modelo De Particulas", m_model, &m_modelChangedEvent);
+
+	if (m_material != nullptr) {
+		GUIDrawer::DrawMaterial(p_root, "Material", m_material, &m_modelChangedEvent);
+	}
+
+	GUIDrawer::DrawScalar<float>(p_root, "Velocidad", std::bind(&CParticles::ParticlesSpeed, this), std::bind(&CParticles::SetParticlesSpeed, this, std::placeholders::_1), 0.01f, 0.0f, 1000.0f);
+	GUIDrawer::DrawScalar<float>(p_root, "Tiempo De Destruccion", DestroyTime, 0.005f, 0.f);
+	GUIDrawer::DrawScalar<float>(p_root, "Tiempo De Creacion", std::bind(&CParticles::InstanceTime, this), std::bind(&CParticles::SetInstanceTime, this, std::placeholders::_1), 0.01f, 0.0f, 1000.0f);
+	GUIDrawer::DrawScalar<float>(p_root, "Angulo", std::bind(&CParticles::OpenAngle, this), std::bind(&CParticles::SetOpenAngle, this, std::placeholders::_1), 0.01f, 0.1f, 1000.0f);
+	GUIDrawer::DrawBoolean(p_root, "Usar Colision", std::bind(&CParticles::UseCollision, this), std::bind(&CParticles::UseColision, this, placeholders::_1));
+	GUIDrawer::DrawVec3(p_root, "Direccion", Direction, 0.1f);
 }
 
 void CParticles::OnFixedUpdate (float deltaTime) 
@@ -147,30 +190,29 @@ void CParticles::OnFixedUpdate (float deltaTime)
 		Actor& NewParticleModel = ServiceLocator::Get<SceneManager>().GetCurrentScene()->CreateActor("Particle");
 		NewParticleModel.transform.ScaleLocal (OvMaths::FVector3 (0.3f, 0.3f, 0.3f));
 
-		auto& MaterialsManager = ServiceLocator::Get<OvCore::ResourceManagement::MaterialManager>();
 		auto& ModelManager = ServiceLocator::Get<OvCore::ResourceManagement::ModelManager>();
 
 		auto& NewMaterial = NewParticleModel.AddComponent<CMaterialRenderer>();
-		const auto mat = MaterialsManager[":Materials\\Default.ovmat"];
+		const auto mat = m_material;
 
 		if (mat) {
 			NewMaterial.FillWithMaterial(*mat);
-			OVLOG_INFO ("EL MATERIAL SI SE GENERO");
 		}
 
 		auto& NewModelRender = NewParticleModel.AddComponent <CModelRenderer>();
-		const auto m_Model = ModelManager[":Models\\Sphere.fbx"];
 
-		NewModelRender.SetModel(m_Model);
-		
-		auto& NewPhysical = NewParticleModel.AddComponent<CPhysicalSphere>();
-		NewPhysical.SetKinematic(true);
-		NewPhysical.SetRadius (0.3f);
+		NewModelRender.SetModel(m_model);
+
+		if (UseCollision) {
+			auto& NewPhysical = NewParticleModel.AddComponent<CPhysicalSphere>();
+			NewPhysical.SetKinematic(true);
+			NewPhysical.SetRadius(1.f);
+		}
 
 		NewParticleModel.SetName(to_string(owner.GetChildren().size()));
 		NewParticleModel.SetParent(owner);
 
-		OvMaths::FQuaternion NewRotation = OvMaths::FQuaternion(0.1f, 0.1f, 0.1f, 0.1f);;
+		OvMaths::FQuaternion NewRotation = OvMaths::FQuaternion(0.1f, 0.1f, 0.1f, 0.1f);
 
 		if (OpenAngle <= 0.1f) {
 			NewRotation = OvMaths::FQuaternion (0.1f, 0.1f, 0.1f, 0.1f);
@@ -182,9 +224,6 @@ void CParticles::OnFixedUpdate (float deltaTime)
 
 		string random = "Random Generado: ";
 		string r = random.append (to_string (RandomFloatGenerate(0, OpenAngle)));
-
-
-		OVLOG_INFO (r);
 
 		NewParticleModel.transform.SetWorldRotation (NewRotation);
 		NewParticleModel.AddComponent<OvCore::ECS::Components::DestroyTime>().SetTime (DestroyTime);

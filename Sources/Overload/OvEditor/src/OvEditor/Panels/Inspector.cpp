@@ -42,6 +42,7 @@
 
 #include "OvEditor/Core/EditorActions.h"
 #include "../Components/CParticles.h"
+#include "../Components/SetPlayerActor.h";
 
 using namespace OvCore::ECS::Components;
 using namespace OvUI::Widgets;
@@ -92,6 +93,7 @@ OvEditor::Panels::Inspector::Inspector
 		componentSelectorWidget.choices.emplace(11, "Audio Source");
 		componentSelectorWidget.choices.emplace(12, "Audio Listener");
 		componentSelectorWidget.choices.emplace(13, "Particles System");
+		componentSelectorWidget.choices.emplace(14, "Set Actor System");
 
 		auto& addComponentButton = m_inspectorHeader->CreateWidget<OvUI::Widgets::Buttons::Button>("Add Component", OvMaths::FVector2{ 100.f, 0 });
 		addComponentButton.idleBackgroundColor = OvUI::Types::Color{ 0.7f, 0.5f, 0.f };
@@ -114,6 +116,7 @@ OvEditor::Panels::Inspector::Inspector
 			case 11: GetTargetActor()->AddComponent<CAudioSource>();		break;
 			case 12: GetTargetActor()->AddComponent<CAudioListener>();		break;
 			case 13: GetTargetActor()->AddComponent<CParticles>();   		break;
+			case 14: GetTargetActor()->AddComponent<SetPlayerActor>();   	break;
 			}
 
 			componentSelectorWidget.ValueChangedEvent.Invoke(componentSelectorWidget.currentChoice);
@@ -143,6 +146,7 @@ OvEditor::Panels::Inspector::Inspector
 			case 11: defineButtonsStates(GetTargetActor()->GetComponent<CAudioSource>());		return;
 			case 12: defineButtonsStates(GetTargetActor()->GetComponent<CAudioListener>());		return;
 			case 13: defineButtonsStates(GetTargetActor()->GetComponent<CParticles>());		    return;
+			case 14: defineButtonsStates(GetTargetActor()->GetComponent<SetPlayerActor>());		return;
 			}
 		};
 

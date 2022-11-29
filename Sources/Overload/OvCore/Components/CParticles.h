@@ -40,12 +40,18 @@ namespace OvCore::ECS::Components
 		float DestroyTime = 3;
 		float InstanceTime = 1;
 		float OpenAngle = 15;
+		bool UseCollision;
 
 		OvMaths::FVector3 Direction = OvMaths::FVector3(0, 0, 0);
 
 	private:
 		virtual void OnEnable() override;
 		virtual void OnDisable() override;
+		OvTools::Eventing::Event<> m_modelChangedEvent;
+		OvTools::Eventing::Event<> m_materialChangedEvent;
+
+		OvRendering::Resources::Model* m_model = nullptr;
+		OvCore::Resources::Material* m_material;
 
 
 	public:
@@ -54,13 +60,17 @@ namespace OvCore::ECS::Components
 		virtual void OnInspector(OvUI::Internal::WidgetContainer& p_root) override;
 		virtual void OnFixedUpdate(float p_deltaTime) override;
 
-		//FUNCTIONS VOID
+	public:
 		void Update();
 		void SetParticlesSpeed (float NewSpeed);
 		void SetDestroyTime(float DestroyTime);
 		void SetDirection(OvMaths::FVector3 Dir);
 		void SetInstanceTime(float p_Time);
 		void SetOpenAngle(float p_Angle);
+		void SetModel(OvRendering::Resources::Model* p_model);
+		void SetNewMaterial (OvCore::Resources::Material& p_material);
+		void UseColision (bool p_Col);
+
 		float RandomFloatGenerate (float p_RangeMin, float p_RangeMax);
 	};
 }

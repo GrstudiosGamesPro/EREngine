@@ -23,6 +23,7 @@
 #include "OvCore/ECS/Components/CAmbientSphereLight.h"
 #include "../Components/CParticles.h"
 #include "../Components/DestroyTime.h"
+#include "../Components/SetPlayerActor.h"
 
 OvTools::Eventing::Event<OvCore::ECS::Actor&> OvCore::ECS::Actor::DestroyedEvent;
 OvTools::Eventing::Event<OvCore::ECS::Actor&> OvCore::ECS::Actor::CreatedEvent;
@@ -451,6 +452,7 @@ void OvCore::ECS::Actor::OnDeserialize(tinyxml2::XMLDocument & p_doc, tinyxml2::
 				else if (componentType == typeid(Components::CAmbientSphereLight).name())	component = &AddComponent<OvCore::ECS::Components::CAmbientSphereLight>();
 				else if (componentType == typeid(Components::CParticles).name())	component = &AddComponent<OvCore::ECS::Components::CParticles>();
 				else if (componentType == typeid(Components::DestroyTime).name())	component = &AddComponent<OvCore::ECS::Components::DestroyTime>();
+				else if (componentType == typeid(Components::SetPlayerActor).name())	component = &AddComponent<Components::SetPlayerActor>();
 
 				if (component)
 					component->OnDeserialize(p_doc, currentComponent->FirstChildElement("data"));

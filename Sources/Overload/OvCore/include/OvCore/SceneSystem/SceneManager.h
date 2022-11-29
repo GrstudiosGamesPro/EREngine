@@ -101,6 +101,11 @@ namespace OvCore::SceneSystem
 		*/
 		void ForgetCurrentSceneSourcePath();
 
+		void SetCharacterController (ECS::Actor* Player);
+
+	public:
+		ECS::Actor* CharacterController;
+
 	public:
 		OvTools::Eventing::Event<> SceneLoadEvent;
 		OvTools::Eventing::Event<> SceneUnloadEvent;

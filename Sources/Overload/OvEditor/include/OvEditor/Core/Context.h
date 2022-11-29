@@ -81,7 +81,7 @@ namespace OvEditor::Core
 		const std::string projectScriptsPath;
 		const std::string editorAssetsPath;
 
-		std::unique_ptr<OvCore::ECS::Components::CParticles>		particles;
+		std::unique_ptr<OvCore::ECS::Components::CParticles>	particles;
 		std::unique_ptr<OvWindowing::Context::Device>			device;
 		std::unique_ptr<OvWindowing::Window>					window;
 		std::unique_ptr<OvWindowing::Inputs::InputManager>		inputManager;
