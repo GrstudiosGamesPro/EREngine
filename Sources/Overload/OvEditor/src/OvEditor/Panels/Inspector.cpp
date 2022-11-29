@@ -271,7 +271,7 @@ void OvEditor::Panels::Inspector::CreateActorInspector(OvCore::ECS::Actor& p_tar
 	std::map<std::string, OvCore::ECS::Components::AComponent*> components;
 
 	for (auto component : p_target.GetComponents())
-		if (component->GetName() != "Transform")
+		if (component->GetName() != "Transformador")
 			components[component->GetName()] = component.get();
 
 	auto transform = p_target.GetComponent<OvCore::ECS::Components::CTransform>();
