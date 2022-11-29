@@ -111,6 +111,7 @@ void CParticles::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_
 	Serializer::SerializeVec3		(p_doc, p_node, "Direction", Direction);
 	Serializer::SerializeModel	    (p_doc, p_node, "CurrentModel", m_model);
 	Serializer::SerializeBoolean	(p_doc, p_node, "UseCol", UseCollision);
+	Serializer::SerializeMaterial	(p_doc, p_node, "CurMat", m_material);
 }
 
 void CParticles::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
@@ -122,6 +123,7 @@ void CParticles::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* 
 	SetDirection(Serializer::DeserializeVec3				 (p_doc, p_node, "Direction"));
 	SetModel(Serializer::DeserializeModel                    (p_doc, p_node, "CurrentModel"));
 	UseColision (Serializer::DeserializeBoolean              (p_doc, p_node, "UseCol"));
+	SetNewMaterial (Serializer::DeserializeMaterial          (p_doc, p_node, "CurMat"));
 }
 
 void CParticles::SetOpenAngle (float p_Angle) 
@@ -157,9 +159,9 @@ void CParticles::SetModel(OvRendering::Resources::Model* p_model)
 	OVLOG_INFO ("Modelo De Particulas Cambiado");
 }
 
-void CParticles::SetNewMaterial (OvCore::Resources::Material& p_material)
+void CParticles::SetNewMaterial (OvCore::Resources::Material* p_material)
 {
-	m_material = &p_material;
+	m_material = p_material;
 	m_materialChangedEvent.Invoke();
 	OVLOG_INFO("Modelo De Particulas Cambiado");
 }

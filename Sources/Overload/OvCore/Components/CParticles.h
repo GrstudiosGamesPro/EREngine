@@ -68,7 +68,7 @@ namespace OvCore::ECS::Components
 		void SetInstanceTime(float p_Time);
 		void SetOpenAngle(float p_Angle);
 		void SetModel(OvRendering::Resources::Model* p_model);
-		void SetNewMaterial (OvCore::Resources::Material& p_material);
+		void SetNewMaterial (OvCore::Resources::Material* p_material);
 		void UseColision (bool p_Col);
 
 		float RandomFloatGenerate (float p_RangeMin, float p_RangeMax);
