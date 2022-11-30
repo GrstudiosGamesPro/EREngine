@@ -69,7 +69,7 @@ void OvCore::Scripting::LuaActorBinder::BindActor(sol::state & p_luaState)
 		"ObtenerParticulas", & Actor::GetComponent<CParticles>,
 
 		/* Behaviours relatives */
-		"GetBehaviour", [](Actor& p_this, const std::string& p_name) -> sol::table
+		"ObtenerBehaviour", [](Actor& p_this, const std::string& p_name) -> sol::table
 		{
 			auto behaviour = p_this.GetBehaviour(p_name);
 			if (behaviour)
